@@ -106,7 +106,14 @@ export function TransactionForm({ accounts, categories, userId }: TransactionFor
     }
 
     // 残高更新
-    await updateBalances(amountNum);
+    try {
+      await updateBalances(amountNum);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError("残高の更新に失敗しました: " + message);
+      setLoading(false);
+      return;
+    }
 
     router.push("/transactions");
     router.refresh();
