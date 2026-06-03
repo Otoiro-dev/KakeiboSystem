@@ -89,6 +89,7 @@ create or replace function increment_balance(p_account_id uuid, p_amount numeric
 returns void
 language plpgsql
 security definer
+set search_path = public
 as $$
 begin
   update accounts
