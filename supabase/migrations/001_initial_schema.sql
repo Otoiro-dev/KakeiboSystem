@@ -67,7 +67,11 @@ create table transactions (
   memo text,
   receipt_url text,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  constraint transactions_transfer_account_check check (
+    (type <> 'transfer' and to_account_id is null)
+    or (type = 'transfer' and to_account_id is not null and to_account_id <> account_id)
+  )
 );
 
 create index transactions_user_date on transactions (user_id, date desc);
