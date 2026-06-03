@@ -57,7 +57,7 @@ JSONのみを返し、説明文は不要です。`,
     ],
   });
 
-  const text = response.content[0].type === "text" ? response.content[0].text : "";
+  const text = response.content.find((c) => c.type === "text")?.text ?? "";
 
   try {
     const jsonMatch = text.match(/\{[\s\S]*\}/);
