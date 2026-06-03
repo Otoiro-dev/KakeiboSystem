@@ -68,11 +68,17 @@ export function TransactionForm({ accounts, categories, userId }: TransactionFor
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!amount || !accountId) return;
 
     setLoading(true);
     setError(null);
 
+    if (type === "transfer" && (!toAccountId || toAccountId === accountId)) {
+      setError("振替先口座を選択してください");
+      setLoading(false);
+      return;
+    }
     const amountNum = parseFloat(amount.replace(/,/g, ""));
     if (isNaN(amountNum) || amountNum <= 0) {
       setError("金額は正の数で入力してください");
