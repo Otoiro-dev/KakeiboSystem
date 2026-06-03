@@ -21,7 +21,13 @@ export async function POST(request: NextRequest) {
 
   const bytes = await file.arrayBuffer();
   const base64 = Buffer.from(bytes).toString("base64");
-  const mediaType = (file.type as "image/jpeg" | "image/png" | "image/gif" | "image/webp") || "image/jpeg";
+  const mediaType =
+    file.type === "image/jpeg" ||
+    file.type === "image/png" ||
+    file.type === "image/gif" ||
+    file.type === "image/webp"
+      ? (file.type as "image/jpeg" | "image/png" | "image/gif" | "image/webp")
+      : "image/jpeg";
 
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
