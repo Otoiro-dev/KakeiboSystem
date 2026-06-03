@@ -46,7 +46,7 @@ create policy "categories_select" on categories
 create policy "categories_insert" on categories
   for insert with check (auth.uid() = user_id);
 create policy "categories_update" on categories
-  for update using (auth.uid() = user_id);
+  for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "categories_delete" on categories
   for delete using (auth.uid() = user_id);
 
