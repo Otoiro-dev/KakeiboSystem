@@ -121,17 +121,19 @@ export function TransactionForm({ accounts, categories, userId }: TransactionFor
 
   const updateBalances = async (amountNum: number) => {
     if (type === "income") {
-      await supabase.rpc("increment_balance", {
+      const { error } = await supabase.rpc("increment_balance", {
         p_account_id: accountId,
         p_amount: amountNum,
       });
+      if (error) throw error;
     } else if (type === "expense") {
-      await supabase.rpc("increment_balance", {
+      const { error } = await supabase.rpc("increment_balance", {
         p_account_id: accountId,
         p_amount: -amountNum,
       });
+      if (error) throw error;
     } else if (type === "transfer" && toAccountId) {
-      await Promise.all([
+      const [fromRes, toRes] = await Promise.all([
         supabase.rpc("increment_balance", {
           p_account_id: accountId,
           p_amount: -amountNum,
@@ -141,6 +143,8 @@ export function TransactionForm({ accounts, categories, userId }: TransactionFor
           p_amount: amountNum,
         }),
       ]);
+      if (fromRes.error) throw fromRes.error;
+      if (toRes.error) throw toRes.error;
     }
   };
 
